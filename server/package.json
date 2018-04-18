@@ -1,0 +1,15 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server listening to the image classifier",
+  "main": "index.js",
+  "author": "Markus Siering",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.16.2",
+    "http": "^0.0.0",
+    "osc": "^2.2.0",
+    "ws": "^3.3.1"
+  }
+}
