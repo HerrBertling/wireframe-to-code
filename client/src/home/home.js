@@ -1,9 +1,40 @@
 import React, { Component } from "react";
 import Helmet from "react-helmet";
 import { Button, Header } from "semantic-ui-react";
-import Camera from 'react-icons/lib/ti/camera';
-import Warning from 'react-icons/lib/ti/warning-outline';
+import { TiCamera, TiWarning } from "react-icons/ti";
 import { Phone } from "../_common";
+
+const Text = ({ children }) => <p>{children}</p>;
+
+// Adjust this list of components to fit to the components you
+// trained the machine to recognize. This example uses semantic-ui
+// for rendering components. You can find documentation about the
+// available props for each component here: https://react.semantic-ui.com/
+// For the text component, I just threw in the paragraph output
+// you see above this explanation :)
+
+const availableComponents = {
+  button: {
+    component: Button,
+    text: "Click here",
+    props: {
+      primary: true
+    }
+  },
+  headline: {
+    component: Header,
+    text: "Large Header",
+    props: {
+      size: "large",
+      as: "h2"
+    }
+  },
+  text: {
+    component: Text,
+    text:
+      "Nancy, seriously, you're gonna be so cool now, it's ridiculous. If we’re both going crazy, then we’ll go crazy together, right? Friends don't lie. He’s a sensitive kid. Is he? He’s missing, is what he is!"
+  }
+};
 
 class Home extends Component {
   state = {
@@ -60,35 +91,29 @@ class Home extends Component {
     const componentList = this.state.components.map(component => {
       const componentName = component[0];
       const componentKey = component[1] + component[2] + component[3];
-      if (componentName === '"button"') {
-        return (
-          <div>
-            <Button primary key={componentKey}>Click here!</Button>
-          </div>
+      if (!Object.keys(availableComponents).includes(componentName)) {
+        console.warn(
+          `There is no component called "${componentName}" in the list of available components. You should either add "${componentName}" to the list or adjust your machine learning to not recognize this component.`
         );
+        return null;
       }
-      if (componentName === '"headline"') {
-        return <Header key={componentKey} size='large'>Large Header</Header>;
-      }
-      if (componentName === '"text"') {
-        return (
-          <p key={componentKey}>
-            Nancy, seriously, you're gonna be so cool now, it's ridiculous. If
-            we’re both going crazy, then we’ll go crazy together, right? Friends
-            don't lie. He’s a sensitive kid. Is he? He’s missing, is what he is!
-          </p>
-        );
-      }
+      const tempItem = availableComponents[componentName];
+      const TempComponent = tempItem.component;
+      return (
+        <TempComponent key={componentKey} {...tempItem.props}>
+          {tempItem.text}
+        </TempComponent>
+      );
     });
     return (
-      <div className='homeWrapper'>
+      <div className="homeWrapper">
         <Helmet>
           <title>Wireframe to Code demo</title>
         </Helmet>
         <Phone>
           {this.state.hasConnectionError && (
             <div className="homeError">
-              <Warning className="homeIconSpacer" size={64} />
+              <TiWarning className="homeIconSpacer" size={64} />
               <h2>Sorry, no connection!</h2>
               <p>
                 You need to start the node server in order to receive scanned
@@ -98,7 +123,7 @@ class Home extends Component {
           )}
           {!this.state.components.length && (
             <div className="homeError">
-              <Camera className="homeIconSpacer" size={64} />
+              <TiCamera className="homeIconSpacer" size={64} />
               <h2>Please scan components!</h2>
               <p>
                 You need to scan components via the DoodleClassifier to see
