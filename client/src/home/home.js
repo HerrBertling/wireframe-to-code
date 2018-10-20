@@ -39,7 +39,7 @@ const availableComponents = {
 class Home extends Component {
   state = {
     components: [],
-    hasConnectionError: false
+    hasConnectionError: true
   };
 
   runWebSocket = () => {
